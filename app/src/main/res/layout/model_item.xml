@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100sp">
+
+<RelativeLayout
+    android:id="@+id/relativeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="80sp"
+        android:layout_height="80dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/ic_baseline_music_note_24"
+        android:layout_marginBottom="10dp"></ImageView>
+
+    <TextView
+        android:id="@+id/songName"
+        android:layout_margin="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SONG NAME"
+        android:textSize="20dp"
+        android:layout_toRightOf="@+id/imageView"
+        >
+    </TextView>
+
+    <TextView
+        android:id="@+id/artistName"
+        android:layout_margin="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Artist NAME"
+        android:textSize="15dp"
+        android:layout_toRightOf="@+id/imageView"
+        android:layout_below="@+id/songName"
+        >
+    </TextView>
+
+    <TextView
+        android:id="@+id/playNow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_margin="30dp"
+        android:text="PLAYING NOW"
+        android:textSize="20dp"
+        android:visibility="invisible">
+
+    </TextView>
+
+</RelativeLayout>
+
+</androidx.cardview.widget.CardView>
