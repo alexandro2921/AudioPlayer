@@ -27,19 +27,19 @@ public class MainActivity extends AppCompatActivity implements RVAdapterInterfac
 
     SearchView searchView;
     RecyclerView recyclerView;
-    List<Model> modelList;
+    List<Model> modelList,modelListFilter;
     RVAdapter adapter;
     MediaPlayer mediaPlayer;
     ImageView prev,play,next;
     SeekBar seekBar;
-    Integer currentAudioIndex;
+    Integer currentAudioIndex,currentAudioId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        modelList = getModelList();
+        modelList = modelListFilter = getModelList();
         List<Model> modelListFiltered = new ArrayList<>();
         recyclerView = findViewById(R.id.recyclerView);
         adapter = new RVAdapter(this,MainActivity.this, modelList);
@@ -145,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements RVAdapterInterfac
         }else{
             adapter.setResultList(result);
             adapter.notifyDataSetChanged();
+            modelListFilter=result;
         }
 
         Log.i("MSGG",result.toString());
@@ -152,11 +153,13 @@ public class MainActivity extends AppCompatActivity implements RVAdapterInterfac
     }
 
     public void playPrevious(){
+        currentAudioIndex = searchIndex(currentAudioId);
         if(mediaPlayer!=null){
             mediaPlayer.release();
         }
 
         if(currentAudioIndex==0){
+            currentAudioId = modelList.get(currentAudioIndex).getId();
             currentAudioIndex=1;
             Toast.makeText(this, "NO MORE PREVIOUS SONG", Toast.LENGTH_SHORT).show();
         }
@@ -169,12 +172,14 @@ public class MainActivity extends AppCompatActivity implements RVAdapterInterfac
                     model.setPlaying(false);
                 }
                 modelList.get(currentAudioIndex-1).setPlaying(true);
+                currentAudioId = modelList.get(currentAudioIndex-1).getId();
                 currentAudioIndex-=1;
                 adapter.notifyDataSetChanged();
             }
     }
 
     public void playNext(){
+        currentAudioIndex = searchIndex(currentAudioId);
         if(mediaPlayer!=null){
             mediaPlayer.release();
         }
@@ -190,6 +195,7 @@ public class MainActivity extends AppCompatActivity implements RVAdapterInterfac
                     model.setPlaying(false);
                 }
                 modelList.get(currentAudioIndex).setPlaying(true);
+                currentAudioId = modelList.get(currentAudioIndex).getId();
             }
         }else{
             mediaPlayer = MediaPlayer.create(MainActivity.this,modelList.get(currentAudioIndex+1).getId());
@@ -202,9 +208,11 @@ public class MainActivity extends AppCompatActivity implements RVAdapterInterfac
                 }
                 modelList.get(currentAudioIndex+1).setPlaying(true);
         }
+            currentAudioId = modelList.get(currentAudioIndex+1).getId();
             currentAudioIndex+=1;
             adapter.notifyDataSetChanged();
         }
+
     }
 
     public void playPause(){
@@ -215,11 +223,23 @@ public class MainActivity extends AppCompatActivity implements RVAdapterInterfac
         }
     }
 
+    public int searchIndex(Integer id){
+        Integer index=0;
+
+        for(Model model: modelList){
+            if(model.getId()==id){
+                index = modelList.indexOf(model);
+                Log.i("MSG","index ke "+index);
+            }
+        }
+        return index;
+    }
+
     @Override
     public void onItemClick(int position) {
-
         currentAudioIndex = position;
-        Model audio = modelList.get(position);
+        Model audio = modelListFilter.get(position);
+        currentAudioId = modelListFilter.get(position).getId();
         if(mediaPlayer!=null){
             mediaPlayer.release();
         }
